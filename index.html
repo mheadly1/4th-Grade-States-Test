@@ -265,10 +265,10 @@ var LOG_URL = "";
 var REG={NE:"Northeast",SE:"Southeast",MW:"Midwest",SW:"Southwest",W:"West"};
 var RAW=[
 ["AL","Alabama","Montgomery","SE"],["AK","Alaska","Juneau","W"],["AZ","Arizona","Phoenix","SW"],["AR","Arkansas","Little Rock","SE"],
-["CA","California","Sacramento","W"],["CO","Colorado","Denver","W"],["CT","Connecticut","Hartford","NE"],["DE","Delaware","Dover","SE"],
+["CA","California","Sacramento","W"],["CO","Colorado","Denver","W"],["CT","Connecticut","Hartford","NE"],["DE","Delaware","Dover","NE"],
 ["FL","Florida","Tallahassee","SE"],["GA","Georgia","Atlanta","SE"],["HI","Hawaii","Honolulu","W"],["ID","Idaho","Boise","W"],
 ["IL","Illinois","Springfield","MW"],["IN","Indiana","Indianapolis","MW"],["IA","Iowa","Des Moines","MW"],["KS","Kansas","Topeka","MW"],
-["KY","Kentucky","Frankfort","SE"],["LA","Louisiana","Baton Rouge","SE"],["ME","Maine","Augusta","NE"],["MD","Maryland","Annapolis","SE"],
+["KY","Kentucky","Frankfort","SE"],["LA","Louisiana","Baton Rouge","SE"],["ME","Maine","Augusta","NE"],["MD","Maryland","Annapolis","NE"],
 ["MA","Massachusetts","Boston","NE"],["MI","Michigan","Lansing","MW"],["MN","Minnesota","St. Paul","MW"],["MS","Mississippi","Jackson","SE"],
 ["MO","Missouri","Jefferson City","MW"],["MT","Montana","Helena","W"],["NE","Nebraska","Lincoln","MW"],["NV","Nevada","Carson City","W"],
 ["NH","New Hampshire","Concord","NE"],["NJ","New Jersey","Trenton","NE"],["NM","New Mexico","Santa Fe","SW"],["NY","New York","Albany","NE"],
@@ -618,6 +618,22 @@ function loadMap(i){
   s.onerror=function(){loadMap(i+1);};
   document.head.appendChild(s);
 }
+function loadAtlas(){
+  var byName={}; S.forEach(function(x){byName[x.n]=x.c;});
+  function ring(r){return "M"+r.map(function(p){return p[0].toFixed(1)+","+p[1].toFixed(1);}).join("L")+"Z";}
+  function geo(g){if(!g)return "";if(g.type==="Polygon")return g.coordinates.map(ring).join("");if(g.type==="MultiPolygon")return g.coordinates.map(function(p){return p.map(ring).join("");}).join("");return "";}
+  var s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js";
+  s.onload=function(){
+    fetch("https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-albers-10m.json").then(function(r){if(!r.ok)throw new Error("map");return r.json();}).then(function(t){
+      var fc=window.topojson.feature(t,t.objects.states), paths={};
+      fc.features.forEach(function(f){var nm=f.properties&&f.properties.name, c=byName[nm]||("X"+f.id); paths[c]={path:geo(f.geometry),name:nm};});
+      window.__maps.atlas={paths:paths}; mapState="ready"; if(tab==="map")ensureMap();
+    }).catch(function(){loadMap(0);});
+  };
+  s.onerror=function(){loadMap(0);};
+  document.head.appendChild(s);
+}
 function ensureMap(){
   var msg=document.getElementById("mapmsg");
   if(mapBuilt) return;
@@ -637,7 +653,7 @@ function bboxOf(code){
   return {x:x1,y:y1,width:x2-x1,height:y2-y1};
 }
 function buildMap(){
-  var m=window.__maps[Object.keys(window.__maps)[0]]; if(!m||!m.paths) return false;
+  var m=window.__maps.atlas||window.__maps[Object.keys(window.__maps)[0]]; if(!m||!m.paths) return false;
   var gO=mk("g",{}), gL=mk("g",{}), gB=mk("g",{}); gRing=mk("g",{}); gLabels=mk("g",{});
   [gO,gL,gB,gRing,gLabels].forEach(function(g){svg.appendChild(g);});
   Object.keys(m.paths).forEach(function(k){
@@ -779,7 +795,7 @@ function askName(){
 document.getElementById("resetProgress").onclick=function(){if(!confirm("Clear all saved progress on this device?"))return;prog={};save();updateMeters();start();};
 
 /* ---------- init ---------- */
-renderRegions(); updateMeters(); start(); loadMap(0);
+renderRegions(); updateMeters(); start(); loadAtlas();
 if(LOG_URL){if(student){showWho();send("Started",{region:regionName(),mode:"States & Capitals"});}else askName();}
 })();
 </script>
