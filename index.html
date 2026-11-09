@@ -144,7 +144,7 @@ table.study td.ab{font-weight:700;letter-spacing:.05em;width:4.5em}
 @media (max-width:919px){.mapcard{aspect-ratio:1.2/1}}
 #map{display:block;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 #map.dragging{cursor:grabbing}
-.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom{position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:6px}
 .zoom button{width:42px;height:42px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-size:1.3rem;font-weight:700;cursor:pointer;line-height:1}
 .zoom button.txt{font-size:.75rem}
 .mapmsg{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted)}
@@ -399,7 +399,7 @@ function start(customDeck){
   if(isMap){ ensureMap(); }
   if(tab==="learn") return renderLearn();
   if(tab==="test") return newTest();
-  if(tab==="map"){ clearMapStates(); applyFilter(); paintMap(); if(sub.map==="explore") return renderExplore(); }
+  if(tab==="map"){ clearMapStates(); applyFilter(); paintMap(); if(mapOK){ if(region==="all") resetZoom(); else fitPool(); } if(sub.map==="explore") return renderExplore(); }
   startDeck(customDeck);
 }
 
@@ -608,7 +608,7 @@ function printTest(){
 
 /* ---------- map ---------- */
 var NS="http://www.w3.org/2000/svg", svg=document.getElementById("map");
-var els={}, centers={}, sizes={}, mapOK=false, mapBuilt=false, mapState="loading", unit=1, base=null, vb=null, gRing, gLabels, labelEls={};
+var gB=null, boxRect={}, SMALL=["NH","VT","MA","RI","CT","NJ","DE","MD"], els={}, centers={}, sizes={}, mapOK=false, mapBuilt=false, mapState="loading", unit=1, base=null, vb=null, gRing, gLabels, labelEls={};
 var MAPS=["us-aea-en","us-lcc-en","us-mill-en","us-merc-en"];
 function loadMap(i){
   if(i>=MAPS.length){mapState="fail";if(tab==="map")ensureMap();return;}
@@ -654,7 +654,7 @@ function bboxOf(code){
 }
 function buildMap(){
   var m=window.__maps.atlas||window.__maps[Object.keys(window.__maps)[0]]; if(!m||!m.paths) return false;
-  var gO=mk("g",{}), gL=mk("g",{}), gB=mk("g",{}); gRing=mk("g",{}); gLabels=mk("g",{});
+  var gO=mk("g",{}), gL=mk("g",{}); gB=mk("g",{}); gRing=mk("g",{}); gLabels=mk("g",{});
   [gO,gL,gB,gRing,gLabels].forEach(function(g){svg.appendChild(g);});
   Object.keys(m.paths).forEach(function(k){
     var p=m.paths[k]; if(!p||!p.path) return;
@@ -673,14 +673,14 @@ function buildMap(){
   if(centers.MI){var mb=bboxOf("MI");centers.MI=[mb.x+mb.width*.68,mb.y+mb.height*.68];}
   if(centers.FL){var fb2=bboxOf("FL");centers.FL=[fb2.x+fb2.width*.7,fb2.y+fb2.height*.55];}
   if(centers.LA){var lb=bboxOf("LA");centers.LA=[lb.x+lb.width*.38,lb.y+lb.height*.45];}
-  // call-out boxes for small eastern states
-  var small=["NH","VT","MA","RI","CT","NJ","DE","MD"].filter(function(c){return centers[c];}).sort(function(a,b){return centers[a][1]-centers[b][1];});
+  // call-out boxes for small eastern states (shown only in Explore with labels on)
+  var small=SMALL.filter(function(c){return centers[c];}).sort(function(a,b){return centers[a][1]-centers[b][1];});
   var bw=unit*5, bh=unit*3.2, gap=unit*.7, x0=east+unit*3.5, lastY=-Infinity;
   small.forEach(function(c){
     var y=Math.max(centers[c][1]-bh/2,lastY+bh+gap); lastY=y;
     gB.appendChild(mk("line",{x1:x0,y1:y+bh/2,x2:centers[c][0],y2:centers[c][1],"class":"leader"}));
     var r=mk("rect",{x:x0,y:y,width:bw,height:bh,rx:unit*.7,"class":"ctry box rg-"+BY[c].r,"data-c":c});
-    els[c].push(r); gB.appendChild(r);
+    els[c].push(r); gB.appendChild(r); boxRect[c]={x:x0,y:y,width:bw,height:bh};
     var t=mk("text",{x:x0+bw/2,y:y+bh/2,"font-size":unit*1.6,"class":"boxlbl"}); t.textContent=c; gB.appendChild(t);
     A.x2=Math.max(A.x2,x0+bw); A.y2=Math.max(A.y2,y+bh);
   });
@@ -702,9 +702,10 @@ function zoomAt(f,px,py){
 function resetZoom(){if(base){vb=Object.assign({},base);setVB();}}
 function fitPool(){
   var x1=Infinity,y1=Infinity,x2=-Infinity,y2=-Infinity;
-  pool().forEach(function(c){var b=bboxOf(c);if(!b)return;x1=Math.min(x1,b.x);y1=Math.min(y1,b.y);x2=Math.max(x2,b.x+b.width);y2=Math.max(y2,b.y+b.height);});
+  var boxesOn=calloutsOn();
+  pool().forEach(function(c){[bboxOf(c),boxesOn?boxRect[c]:null].forEach(function(b){if(!b)return;x1=Math.min(x1,b.x);y1=Math.min(y1,b.y);x2=Math.max(x2,b.x+b.width);y2=Math.max(y2,b.y+b.height);});});
   if(x1===Infinity) return;
-  var pad=unit*4,w=x2-x1+pad*2,h=y2-y1+pad*2,r=base.h/base.w; if(h/w>r)w=h/r; else h=w*r;
+  var pad=unit*1.5,w=x2-x1+pad*2,h=y2-y1+pad*2,r=base.h/base.w; if(h/w>r)w=h/r; else h=w*r;
   vb={x:(x1+x2)/2-w/2,y:(y1+y2)/2-h/2,w:w,h:h}; setVB();
 }
 function svgPoint(cx,cy){var pt=svg.createSVGPoint();pt.x=cx;pt.y=cy;var m=svg.getScreenCTM();return m?pt.matrixTransform(m.inverse()):{x:vb.x+vb.w/2,y:vb.y+vb.h/2};}
@@ -730,7 +731,9 @@ function clearMapStates(){S.forEach(function(x){STATES.forEach(function(s){setCl
 function applyFilter(){var P=pool();S.forEach(function(x){setCls(x.c,"faded",P.indexOf(x.c)<0);});}
 function clearRing(){if(gRing)while(gRing.firstChild)gRing.removeChild(gRing.firstChild);}
 function ring(c){clearRing();if(!centers[c]||!gRing)return;var s=sizes[c];if(s>unit*9)return;gRing.appendChild(mk("circle",{cx:centers[c][0],cy:centers[c][1],r:Math.max(s/2+unit*1.2,unit*2.6),"class":"ring"}));}
+function calloutsOn(){return tab==="map"&&sub.map==="explore"&&labelMode!=="none";}
 function paintMap(){
+  if(gB) gB.style.display=calloutsOn()?"":"none";
   svg.classList.toggle("colored",tab==="map"&&sub.map==="explore");
   svg.classList.toggle("live",true);
   if(!gLabels) return;
@@ -743,8 +746,8 @@ function renderExplore(){
   panel.innerHTML="<h2>Map</h2><p class=\"help\">Bonus practice. The map is not on this week’s quiz. Tap a state to see its capital and abbreviation.</p>"+
     segHTML("map",[["explore","Explore"],["find","Find it"]])+
     "<div class=\"toggles\">"+[["abbr","Show abbreviations"],["name","Show names"],["none","Hide labels"]].map(function(o){return "<button class=\"toggle\" data-l=\""+o[0]+"\" aria-pressed=\""+(labelMode===o[0])+"\">"+o[1]+"</button>";}).join("")+"</div>"+
-    "<div class=\"qcard\" id=\"info\">"+(selected?infoHTML(selected):"<p class=\"help\" style=\"margin:0\">Tap any state on the map. Small eastern states have boxes in the ocean that you can tap too.</p>")+"</div>";
-  panel.querySelectorAll("[data-l]").forEach(function(b){b.onclick=function(){labelMode=b.getAttribute("data-l");paintMap();renderExplore();};});
+    "<div class=\"qcard\" id=\"info\">"+(selected?infoHTML(selected):"<p class=\"help\" style=\"margin:0\">Tap any state on the map. Small eastern states also have boxes in the ocean that you can tap.</p>")+"</div>";
+  panel.querySelectorAll("[data-l]").forEach(function(b){b.onclick=function(){labelMode=b.getAttribute("data-l");paintMap();if(region!=="all")fitPool();renderExplore();};});
   if(selected){setCls(selected,"sel",true);ring(selected);}
 }
 function infoHTML(c){var x=BY[c];return "<p class=\"ask\">"+REG[x.r]+"</p><p class=\"prompt\" style=\"font-size:2.2rem\">"+esc(x.n)+"</p><p style=\"margin:0\">Capital: <strong>"+esc(x.cap)+"</strong><br>Abbreviation: <strong>"+x.c+"</strong></p>";}
