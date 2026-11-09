@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>States &amp; Capitals Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF2FF; --surface:#FFFFFF; --ink:#1A2456; --muted:#566089; --line:#CBD7F0; --soft:#F3F7FF;
+  --accent:#1F63F0; --accent-ink:#FFFFFF; --sun:#FFC63A; --good:#17995A; --good-bg:#E3F6EC; --bad:#DC3F45; --bad-bg:#FDECEC;
+  --sea:#D7E8FA; --land:#FFFDF6; --land-hover:#FFF1C9; --land-stroke:#8C93B3; --other:#E2E8F3; --other-stroke:#C5CEDF;
+  --rNE:#6E98F2; --rSE:#3DBB83; --rMW:#F3B840; --rSW:#EC7652; --rW:#A27CDB;
+  --display:"Fredoka","Avenir Next Rounded","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Verdana",system-ui,sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10162E; --surface:#19213F; --ink:#EEF2FF; --muted:#A3ACD0; --line:#2C3763; --soft:#141B36;
+    --accent:#86A8FF; --accent-ink:#0E1636; --sun:#FFC94A; --good:#3CC283; --good-bg:#163527; --bad:#FF7479; --bad-bg:#3A1C25;
+    --sea:#152A47; --land:#2B3358; --land-hover:#3B4472; --land-stroke:#7D87B5; --other:#1C2546; --other-stroke:#2C3763;
+    --rNE:#4870C9; --rSE:#2A8C62; --rMW:#B88A2C; --rSW:#B4573C; --rW:#7658A8;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10162E; --surface:#19213F; --ink:#EEF2FF; --muted:#A3ACD0; --line:#2C3763; --soft:#141B36;
+  --accent:#86A8FF; --accent-ink:#0E1636; --sun:#FFC94A; --good:#3CC283; --good-bg:#163527; --bad:#FF7479; --bad-bg:#3A1C25;
+  --sea:#152A47; --land:#2B3358; --land-hover:#3B4472; --land-stroke:#7D87B5; --other:#1C2546; --other-stroke:#2C3763;
+  --rNE:#4870C9; --rSE:#2A8C62; --rMW:#B88A2C; --rSW:#B4573C; --rW:#7658A8;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:18px clamp(14px,3vw,30px) 30px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 26px;margin-bottom:16px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(2rem,6vw,3.1rem);line-height:1;letter-spacing:-.01em;margin:0}
+h1 .star{color:var(--sun)}
+.sub{margin:.4rem 0 0;color:var(--muted);max-width:48ch}
+.meters{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;min-width:250px;flex:0 1 330px;font-size:.92rem}
+.meter{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.meter span{display:block;height:100%;width:0;border-radius:99px;transition:width .5s ease}
+#mCap span{background:var(--good)} #mAb span{background:var(--accent)}
+.meters .lab{color:var(--muted)} .meters .num{font-weight:700}
+
+.tabs{display:flex;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:5px;gap:4px;overflow-x:auto;margin-bottom:12px;scrollbar-width:none}
+.tab{flex:1 0 auto;border:0;background:transparent;padding:.6rem .9rem;border-radius:13px;font-family:var(--display);font-weight:600;font-size:1.08rem;cursor:pointer;white-space:nowrap}
+@media (max-width:600px){.tabs{flex-wrap:wrap}.tab{flex:1 1 30%;font-size:1rem;padding:.5rem .4rem}}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.tab:not([aria-selected="true"]):hover{background:var(--soft)}
+.tab .tag{font-family:var(--body);font-size:.7rem;font-weight:700;background:var(--sun);color:#3A2A00;border-radius:6px;padding:1px 5px;margin-left:5px;vertical-align:2px}
+.regions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;align-items:center}
+.regions .lbl{color:var(--muted);font-size:.92rem;margin-right:4px}
+.chip{display:inline-flex;align-items:center;gap:.4rem;border:2px solid var(--line);background:var(--surface);border-radius:99px;padding:.25rem .75rem;cursor:pointer;font-size:.95rem}
+.chip .sw{width:11px;height:11px;border-radius:50%}
+.chip .n{color:var(--muted);font-size:.85rem}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.chip[aria-pressed="true"] .n{color:inherit;opacity:.75}
+
+.main{display:block}
+.main.withmap{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:920px){.main.withmap{grid-template-columns:minmax(310px,380px) minmax(0,1fr);align-items:start}}
+.panel{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:22px clamp(16px,3vw,28px) 26px;max-width:780px;margin:0 auto}
+.main.withmap .panel{max-width:none;margin:0}
+@media (min-width:920px){.main.withmap .panel{position:sticky;top:calc(14px + env(safe-area-inset-top,0px))}}
+.panel h2{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0;letter-spacing:-.005em}
+.help{color:var(--muted);margin:.25rem 0 .2rem}
+.seg{display:inline-flex;flex-wrap:wrap;border:2px solid var(--line);border-radius:12px;padding:3px;margin-top:12px;gap:2px}
+.seg button{border:0;background:transparent;padding:.4rem .8rem;border-radius:9px;cursor:pointer;font-size:.95rem;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.qcard{margin-top:16px;background:var(--soft);border-radius:20px;padding:18px clamp(14px,3vw,22px) 20px;border:2px solid var(--line)}
+.ask{margin:0;color:var(--muted);font-weight:700}
+.prompt{font-family:var(--display);font-weight:700;font-size:clamp(2.1rem,7vw,3rem);line-height:1.05;margin:.15rem 0 .4rem;overflow-wrap:anywhere}
+.prompt.abbr{letter-spacing:.06em}
+.bank{display:flex;flex-wrap:wrap;gap:6px;margin:.6rem 0 .2rem}
+.bank span{background:var(--surface);border:2px dashed var(--line);border-radius:10px;padding:.15rem .6rem;font-size:.98rem}
+.banklabel{font-size:.85rem;color:var(--muted);font-weight:700;margin-top:.4rem}
+input.guess{width:100%;margin-top:12px;padding:.8rem 1rem;border-radius:14px;border:3px solid var(--line);background:var(--surface);font-size:1.35rem;font-weight:700}
+input.guess:focus{outline:none;border-color:var(--accent)}
+input.guess.short{max-width:9ch;text-align:center;letter-spacing:.08em}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.feedback{min-height:1.5em;font-weight:700;margin:.6rem 0 0}
+.feedback.good{color:var(--good)} .feedback.bad{color:var(--bad)} .feedback.info{color:var(--muted)}
+.fix{display:none;margin-top:10px;background:var(--surface);border-radius:14px;padding:10px 14px;border:2px solid var(--line)}
+.fix.show{display:block}
+.fix .lineA{color:var(--bad);font-weight:700;text-decoration:line-through;text-decoration-thickness:2px}
+.fix .lineB{font-family:var(--display);font-weight:700;font-size:1.7rem;color:var(--good);letter-spacing:.02em}
+.fix small{display:block;color:var(--muted);font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.btn{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:.6rem 1.1rem;font-weight:700;cursor:pointer}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.good{background:var(--good);border-color:var(--good);color:#fff}
+.btn.bad{border-color:var(--bad);color:var(--bad)}
+.count{color:var(--muted);font-size:.92rem;margin:.9rem 0 0}
+.toggles{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.toggle{border:2px solid var(--line);border-radius:99px;padding:.35rem .9rem;cursor:pointer;background:var(--surface);font-weight:700;font-size:.95rem}
+.toggle[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.card{margin-top:16px;border-radius:22px;border:3px solid var(--line);min-height:190px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;cursor:pointer;background:var(--soft);width:100%}
+.card .side{font-size:.92rem;color:var(--muted);font-weight:700}
+.card .face{font-family:var(--display);font-weight:700;font-size:clamp(2rem,7vw,2.9rem);line-height:1.05;margin:.3rem 0}
+.card.flipped{border-color:var(--good);background:var(--good-bg)}
+.flip-in{animation:flipIn .3s ease}
+@keyframes flipIn{from{transform:rotateX(70deg);opacity:.3}to{transform:none;opacity:1}}
+
+table.study{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-size:1.02rem}
+table.study th{text-align:left;font-size:.85rem;color:var(--muted);font-weight:700;padding:.35rem .5rem;border-bottom:2px solid var(--line)}
+table.study td{padding:.45rem .5rem;border-bottom:1px solid var(--line)}
+table.study tr:nth-child(even) td{background:var(--soft)}
+table.study td.ab{font-weight:700;letter-spacing:.05em;width:4.5em}
+.peek{border:2px dashed var(--line);background:transparent;border-radius:8px;padding:.05rem .55rem;cursor:pointer;color:var(--muted);font-size:.9rem}
+.mk{color:var(--good);font-weight:700;margin-left:.3rem}
+.tips{margin-top:14px;border:2px solid var(--line);border-radius:16px;padding:6px 14px}
+.tips summary{cursor:pointer;font-weight:700;padding:.4rem 0}
+.tips p{margin:.3rem 0 .5rem}
+.tips b{letter-spacing:.04em}
+
+.testrow{display:grid;grid-template-columns:2rem minmax(0,1.2fr) minmax(0,1.3fr) 6.5rem;gap:8px;align-items:start;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.testrow .num{color:var(--muted);font-weight:700;padding-top:.55rem}
+.testrow .st{font-weight:700;padding-top:.55rem}
+.testrow input{width:100%;padding:.5rem .6rem;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:1.05rem}
+.testrow input.ok{border-color:var(--good);background:var(--good-bg)}
+.testrow input.no{border-color:var(--bad);background:var(--bad-bg)}
+.testrow .ans{font-size:.85rem;color:var(--bad);font-weight:700;margin-top:3px}
+.testhead{display:grid;grid-template-columns:2rem minmax(0,1.2fr) minmax(0,1.3fr) 6.5rem;gap:8px;font-size:.82rem;color:var(--muted);font-weight:700;margin-top:14px}
+@media (max-width:560px){
+  .testrow,.testhead{grid-template-columns:1.6rem minmax(0,1fr) 5rem}
+  .testrow .st{grid-column:2 / 4}
+  .testrow .capc{grid-column:2}
+  .testhead .h3{display:none}
+}
+.scorebox{margin-top:14px;border-radius:16px;padding:14px 16px;background:var(--good-bg);border:2px solid var(--good)}
+.scorebox.low{background:var(--soft);border-color:var(--line)}
+.scorebox .big{font-family:var(--display);font-weight:700;font-size:2.4rem;line-height:1}
+
+.mapcard{position:relative;background:var(--sea);border-radius:24px;overflow:hidden;border:2px solid var(--line);aspect-ratio:1.45/1;width:100%;max-height:82vh}
+@media (max-width:919px){.mapcard{aspect-ratio:1.2/1}}
+#map{display:block;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+#map.dragging{cursor:grabbing}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:42px;height:42px;border-radius:12px;border:2px solid var(--line);background:var(--surface);font-size:1.3rem;font-weight:700;cursor:pointer;line-height:1}
+.zoom button.txt{font-size:.75rem}
+.mapmsg{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted)}
+.mapmsg.show{display:flex}
+.other{fill:var(--other);stroke:var(--other-stroke);stroke-width:.6;vector-effect:non-scaling-stroke}
+.ctry{fill:var(--land);stroke:var(--land-stroke);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round;cursor:pointer;transition:fill .18s,opacity .18s}
+.live .ctry:not(.faded):hover{fill:var(--land-hover)}
+.colored .ctry.rg-NE{fill:var(--rNE)} .colored .ctry.rg-SE{fill:var(--rSE)} .colored .ctry.rg-MW{fill:var(--rMW)} .colored .ctry.rg-SW{fill:var(--rSW)} .colored .ctry.rg-W{fill:var(--rW)}
+.ctry.faded{opacity:.3;cursor:default}
+.ctry.sel{fill:var(--accent)!important}
+.ctry.got{fill:var(--good)!important}
+.ctry.late{fill:var(--sun)!important}
+.ctry.missed{fill:var(--bad)!important}
+.ctry.flash{animation:flash .7s ease}
+@keyframes flash{0%,100%{fill:var(--land)}25%,60%{fill:var(--bad)}}
+.leader{stroke:var(--land-stroke);stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}
+.boxlbl,.lbl{fill:var(--ink);font-family:var(--body);font-weight:700;pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.lbl{paint-order:stroke;stroke:var(--surface);stroke-linejoin:round}
+.ring{fill:none;stroke:var(--sun);stroke-width:3;vector-effect:non-scaling-stroke;pointer-events:none;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{stroke-opacity:.25}}
+@media (prefers-reduced-motion: reduce){.ring,.ctry.flash,.flip-in{animation:none}.meter span,.ctry{transition:none}}
+
+footer{margin-top:20px;color:var(--muted);font-size:.9rem;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.linkbtn{border:0;background:none;color:var(--accent);text-decoration:underline;cursor:pointer;padding:0;font-size:.9rem}
+.modal{position:fixed;inset:0;background:rgba(10,16,40,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal[hidden]{display:none}
+.modal .box{background:var(--surface);border-radius:24px;padding:24px;max-width:560px;width:100%;border:2px solid var(--line);max-height:88vh;overflow:auto}
+.modal h2{font-family:var(--display);font-weight:700;font-size:1.7rem;margin:0 0 .3rem}
+.pick{columns:2;column-gap:14px;margin-top:10px}
+.pick label{display:flex;gap:.45rem;align-items:center;padding:.15rem 0;break-inside:avoid;font-size:.98rem}
+.pick h3{font-size:.85rem;color:var(--muted);margin:.6rem 0 .1rem;break-after:avoid}
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:13pt}
+  .wrap,.modal{display:none!important}
+  #print{display:block}
+  #print h1{font-size:22pt;margin:0 0 4pt;font-family:var(--display)}
+  #print .nm{margin:6pt 0 12pt}
+  #print .wb{border:2px solid #000;border-radius:8pt;padding:8pt 10pt;margin-bottom:12pt;line-height:1.8}
+  #print .wb span{display:inline-block;margin-right:18pt}
+  #print table{width:100%;border-collapse:collapse}
+  #print td,#print th{border-bottom:1px solid #999;padding:9pt 4pt;text-align:left}
+  #print .key{page-break-before:always}
+}
+</style>
+<script>window.__maps={};window.jsVectorMap={addMap:function(n,d){window.__maps[n]=d;}};</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>States &amp; Capitals <span class="star">★</span></h1>
+      <p class="sub">Learn all 50 states, their capitals, and their postal abbreviations. Then take a practice test.</p>
+    </div>
+    <div class="meters" aria-live="polite">
+      <span class="lab">Capitals</span><div class="meter" id="mCap"><span></span></div><span class="num" id="nCap">0/50</span>
+      <span class="lab">Abbreviations</span><div class="meter" id="mAb"><span></span></div><span class="num" id="nAb">0/50</span>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Study mode">
+    <button class="tab" role="tab" data-tab="learn" aria-selected="true">Learn</button>
+    <button class="tab" role="tab" data-tab="capitals" aria-selected="false">Capitals</button>
+    <button class="tab" role="tab" data-tab="abbr" aria-selected="false">Abbreviations</button>
+    <button class="tab" role="tab" data-tab="test" aria-selected="false">Practice test</button>
+    <button class="tab" role="tab" data-tab="map" aria-selected="false">Map<span class="tag">BONUS</span></button>
+  </nav>
+  <div class="regions" id="regions"></div>
+
+  <main class="main" id="main">
+    <section class="panel" id="panel" aria-live="polite"></section>
+    <section class="mapcard" id="mapcard" hidden aria-label="Map of the United States">
+      <svg id="map" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Blank map of the United States"></svg>
+      <div class="zoom">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">−</button>
+        <button id="zreset" class="txt" aria-label="Reset zoom">Fit</button>
+      </div>
+      <div class="mapmsg" id="mapmsg"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Progress saves on this device. A state counts as learned after two right answers in a row.</span>
+    <button class="linkbtn" id="resetProgress">Reset progress</button>
+    <span id="who" hidden></span>
+  </footer>
+</div>
+
+<div class="modal" id="pickModal" hidden role="dialog" aria-modal="true" aria-labelledby="pkTitle">
+  <div class="box">
+    <h2 id="pkTitle">Pick this week’s states</h2>
+    <p class="help">Check the states on the quiz. Every tab will practice just these.</p>
+    <div class="row"><button class="btn" id="pkAll">Select all</button><button class="btn" id="pkNone">Clear</button></div>
+    <div class="pick" id="pkList"></div>
+    <div class="row"><button class="btn primary" id="pkDone">Done</button></div>
+  </div>
+</div>
+
+<div class="modal" id="nameModal" hidden role="dialog" aria-modal="true" aria-labelledby="nmTitle">
+  <div class="box">
+    <h2 id="nmTitle">What’s your name?</h2>
+    <p class="help">Your practice scores are shared with the person who sent you this guide.</p>
+    <input class="guess" id="nmInput" type="text" autocomplete="given-name" placeholder="Your name" aria-label="Your name" maxlength="60">
+    <p class="feedback bad" id="nmErr"></p>
+    <div class="row"><button class="btn primary" id="nmGo">Start studying</button></div>
+  </div>
+</div>
+
+<div id="print"></div>
+
+<script>
+(function(){
+"use strict";
+/* Optional: paste a Google Apps Script web app URL between the quotes to log scores to a Google Sheet. */
+var LOG_URL = "";
+
+var REG={NE:"Northeast",SE:"Southeast",MW:"Midwest",SW:"Southwest",W:"West"};
+var RAW=[
+["AL","Alabama","Montgomery","SE"],["AK","Alaska","Juneau","W"],["AZ","Arizona","Phoenix","SW"],["AR","Arkansas","Little Rock","SE"],
+["CA","California","Sacramento","W"],["CO","Colorado","Denver","W"],["CT","Connecticut","Hartford","NE"],["DE","Delaware","Dover","SE"],
+["FL","Florida","Tallahassee","SE"],["GA","Georgia","Atlanta","SE"],["HI","Hawaii","Honolulu","W"],["ID","Idaho","Boise","W"],
+["IL","Illinois","Springfield","MW"],["IN","Indiana","Indianapolis","MW"],["IA","Iowa","Des Moines","MW"],["KS","Kansas","Topeka","MW"],
+["KY","Kentucky","Frankfort","SE"],["LA","Louisiana","Baton Rouge","SE"],["ME","Maine","Augusta","NE"],["MD","Maryland","Annapolis","SE"],
+["MA","Massachusetts","Boston","NE"],["MI","Michigan","Lansing","MW"],["MN","Minnesota","St. Paul","MW"],["MS","Mississippi","Jackson","SE"],
+["MO","Missouri","Jefferson City","MW"],["MT","Montana","Helena","W"],["NE","Nebraska","Lincoln","MW"],["NV","Nevada","Carson City","W"],
+["NH","New Hampshire","Concord","NE"],["NJ","New Jersey","Trenton","NE"],["NM","New Mexico","Santa Fe","SW"],["NY","New York","Albany","NE"],
+["NC","North Carolina","Raleigh","SE"],["ND","North Dakota","Bismarck","MW"],["OH","Ohio","Columbus","MW"],["OK","Oklahoma","Oklahoma City","SW"],
+["OR","Oregon","Salem","W"],["PA","Pennsylvania","Harrisburg","NE"],["RI","Rhode Island","Providence","NE"],["SC","South Carolina","Columbia","SE"],
+["SD","South Dakota","Pierre","MW"],["TN","Tennessee","Nashville","SE"],["TX","Texas","Austin","SW"],["UT","Utah","Salt Lake City","W"],
+["VT","Vermont","Montpelier","NE"],["VA","Virginia","Richmond","SE"],["WA","Washington","Olympia","W"],["WV","West Virginia","Charleston","SE"],
+["WI","Wisconsin","Madison","MW"],["WY","Wyoming","Cheyenne","W"]
+];
+var CAP_ALT={MN:["Saint Paul","St Paul"]};
+var S=RAW.map(function(a){return {c:a[0],n:a[1],cap:a[2],r:a[3]};});
+var BY={}; S.forEach(function(x){BY[x.c]=x;});
+var TRICKY=[
+ ["The “A” states","<b>AL</b> Alabama, <b>AK</b> Alaska, <b>AZ</b> Arizona, <b>AR</b> Arkansas"],
+ ["The “M” states","<b>MA</b> Massachusetts, <b>MD</b> Maryland, <b>ME</b> Maine, <b>MI</b> Michigan, <b>MN</b> Minnesota, <b>MS</b> Mississippi, <b>MO</b> Missouri, <b>MT</b> Montana"],
+ ["The “I” states","<b>IA</b> Iowa, <b>ID</b> Idaho, <b>IL</b> Illinois, <b>IN</b> Indiana"],
+ ["The “N” states","<b>NE</b> Nebraska, <b>NV</b> Nevada, <b>NH</b> New Hampshire, <b>NJ</b> New Jersey, <b>NM</b> New Mexico, <b>NY</b> New York, <b>NC</b> North Carolina, <b>ND</b> North Dakota"],
+ ["Sneaky ones","<b>CT</b> Connecticut, <b>KY</b> Kentucky, <b>TN</b> Tennessee, <b>VT</b> Vermont, <b>PA</b> Pennsylvania, <b>HI</b> Hawaii"],
+ ["The rules","Always 2 letters. Both letters are capitals. No periods. No space. <b>NJ</b> is right. N.J., nj and Nj are not."]
+];
+
+/* ---------- storage ---------- */
+var KEY="us-study-v1", prog={}, custom=[];
+try{prog=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){prog={};}
+try{custom=JSON.parse(localStorage.getItem("us-custom")||"[]")||[];}catch(e){custom=[];}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(prog));}catch(e){}}
+function record(c,k,ok){var x=prog[c]||(prog[c]={cap:0,ab:0});x[k]=ok?Math.min((x[k]||0)+1,9):0;save();updateMeters();}
+function learned(c,k){return prog[c]&&prog[c][k]>=2;}
+function updateMeters(){
+  var P=pool(), a=P.filter(function(c){return learned(c,"cap");}).length, b=P.filter(function(c){return learned(c,"ab");}).length;
+  document.querySelector("#mCap span").style.width=(P.length?a/P.length*100:0)+"%";
+  document.querySelector("#mAb span").style.width=(P.length?b/P.length*100:0)+"%";
+  document.getElementById("nCap").textContent=a+"/"+P.length;
+  document.getElementById("nAb").textContent=b+"/"+P.length;
+}
+
+/* ---------- helpers ---------- */
+function $(s,r){return (r||document).querySelector(s);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch];});}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function tidy(v){return String(v).trim().replace(/\s+/g," ");}
+function checkText(v,answers){
+  v=tidy(v); if(!v) return "empty";
+  for(var i=0;i<answers.length;i++){if(v===answers[i]) return "ok";}
+  for(i=0;i<answers.length;i++){if(v.toLowerCase()===answers[i].toLowerCase()) return "case";}
+  return "wrong";
+}
+function checkAbbr(code,v){
+  var raw=String(v).trim(); if(!raw) return "empty";
+  if(raw===code) return "ok";
+  var letters=raw.replace(/[^a-zA-Z]/g,"");
+  if(letters.toUpperCase()===code){
+    if(/\./.test(raw)) return "period";
+    if(/\s/.test(raw)) return "space";
+    return "case";
+  }
+  return "wrong";
+}
+function capAnswers(c){return [BY[c].cap].concat(CAP_ALT[c]||[]);}
+
+/* ---------- state ---------- */
+var tab="learn", region="all";
+var sub={capitals:"type",abbr:"toAbbr",map:"explore"};
+var bankOn=true, coverCap=false, coverAb=false, labelMode="abbr";
+function pool(){
+  if(region==="custom") return custom.length?custom.slice():S.map(function(x){return x.c;});
+  return S.filter(function(x){return region==="all"||x.r===region;}).map(function(x){return x.c;});
+}
+
+/* ---------- regions ---------- */
+function renderRegions(){
+  var items=[["all","All states",null]].concat(Object.keys(REG).map(function(k){return [k,REG[k],k];}));
+  var html="<span class=\"lbl\">Study:</span>";
+  items.forEach(function(it){
+    var n=it[0]==="all"?50:S.filter(function(x){return x.r===it[0];}).length;
+    html+="<button class=\"chip\" data-r=\""+it[0]+"\" aria-pressed=\""+(region===it[0])+"\">"+(it[2]?"<span class=\"sw\" style=\"background:var(--r"+it[2]+")\"></span>":"")+esc(it[1])+" <span class=\"n\">"+n+"</span></button>";
+  });
+  html+="<button class=\"chip\" data-r=\"custom\" aria-pressed=\""+(region==="custom")+"\">✎ My list <span class=\"n\">"+(custom.length||"pick")+"</span></button>";
+  document.getElementById("regions").innerHTML=html;
+}
+document.getElementById("regions").addEventListener("click",function(e){
+  var b=e.target.closest(".chip"); if(!b) return;
+  var r=b.getAttribute("data-r");
+  if(r==="custom"){openPicker();return;}
+  region=r; renderRegions(); updateMeters(); start();
+  if(tab==="map"&&mapOK){ if(region==="all") resetZoom(); else fitPool(); }
+});
+function openPicker(){
+  var m=$("#pickModal"), L=$("#pkList"), html="";
+  Object.keys(REG).forEach(function(k){
+    html+="<h3>"+REG[k]+"</h3>";
+    S.filter(function(x){return x.r===k;}).sort(function(a,b){return a.n.localeCompare(b.n);}).forEach(function(x){
+      html+="<label><input type=\"checkbox\" value=\""+x.c+"\""+(custom.indexOf(x.c)>=0?" checked":"")+"> "+esc(x.n)+"</label>";
+    });
+  });
+  L.innerHTML=html; m.hidden=false;
+  $("#pkAll").onclick=function(){L.querySelectorAll("input").forEach(function(i){i.checked=true;});};
+  $("#pkNone").onclick=function(){L.querySelectorAll("input").forEach(function(i){i.checked=false;});};
+  $("#pkDone").onclick=function(){
+    custom=Array.prototype.slice.call(L.querySelectorAll("input:checked")).map(function(i){return i.value;});
+    try{localStorage.setItem("us-custom",JSON.stringify(custom));}catch(e){}
+    m.hidden=true; region=custom.length?"custom":"all"; renderRegions(); updateMeters(); start();
+    if(tab==="map"&&mapOK){ if(region==="all") resetZoom(); else fitPool(); }
+  };
+}
+
+/* ---------- tabs ---------- */
+var panel=document.getElementById("panel");
+document.querySelector(".tabs").addEventListener("click",function(e){
+  var b=e.target.closest(".tab"); if(!b) return;
+  tab=b.getAttribute("data-tab");
+  document.querySelectorAll(".tab").forEach(function(t){t.setAttribute("aria-selected",String(t===b));});
+  start();
+});
+function segHTML(key,opts){
+  return "<div class=\"seg\" role=\"group\" data-seg=\""+key+"\">"+opts.map(function(o){return "<button data-v=\""+o[0]+"\" aria-pressed=\""+(sub[key]===o[0])+"\">"+o[1]+"</button>";}).join("")+"</div>";
+}
+panel.addEventListener("click",function(e){
+  var b=e.target.closest(".seg button"); if(!b) return;
+  var key=b.parentNode.getAttribute("data-seg"); if(!key||!(key in sub)) return;
+  sub[key]=b.getAttribute("data-v"); start();
+});
+
+function start(customDeck){
+  var isMap=tab==="map";
+  document.getElementById("mapcard").hidden=!isMap;
+  document.getElementById("main").classList.toggle("withmap",isMap);
+  if(isMap){ ensureMap(); }
+  if(tab==="learn") return renderLearn();
+  if(tab==="test") return newTest();
+  if(tab==="map"){ clearMapStates(); applyFilter(); paintMap(); if(sub.map==="explore") return renderExplore(); }
+  startDeck(customDeck);
+}
+
+/* ---------- learn ---------- */
+function renderLearn(){
+  var P=pool().slice().sort(function(a,b){return BY[a].n.localeCompare(BY[b].n);});
+  var rows=P.map(function(c){var x=BY[c];
+    return "<tr><td>"+esc(x.n)+(learned(c,"cap")&&learned(c,"ab")?"<span class=\"mk\" aria-label=\"learned\">✓</span>":"")+"</td>"+
+      "<td>"+(coverCap?"<button class=\"peek\" data-show=\""+esc(x.cap)+"\">peek</button>":esc(x.cap))+"</td>"+
+      "<td class=\"ab\">"+(coverAb?"<button class=\"peek\" data-show=\""+x.c+"\">peek</button>":x.c)+"</td></tr>";}).join("");
+  panel.innerHTML="<h2>Learn</h2><p class=\"help\">Read through the list. Then cover a column and quiz yourself. Tap “peek” to check.</p>"+
+    "<div class=\"toggles\"><button class=\"toggle\" id=\"tc\" aria-pressed=\""+coverCap+"\">Cover capitals</button><button class=\"toggle\" id=\"ta\" aria-pressed=\""+coverAb+"\">Cover abbreviations</button></div>"+
+    "<table class=\"study\"><thead><tr><th>State</th><th>Capital</th><th>Abbreviation</th></tr></thead><tbody>"+rows+"</tbody></table>"+
+    tipsHTML(false);
+  $("#tc").onclick=function(){coverCap=!coverCap;renderLearn();};
+  $("#ta").onclick=function(){coverAb=!coverAb;renderLearn();};
+  panel.querySelectorAll(".peek").forEach(function(b){b.onclick=function(){var s=document.createElement("span");s.textContent=b.getAttribute("data-show");s.className="flip-in";b.replaceWith(s);};});
+}
+function tipsHTML(open){
+  return "<details class=\"tips\""+(open?" open":"")+"><summary>Tricky abbreviations</summary>"+TRICKY.map(function(t){return "<p><strong>"+t[0]+":</strong> "+t[1]+"</p>";}).join("")+"</details>";
+}
+
+/* ---------- deck engine ---------- */
+var deck=[], idx=0, cur=null, tries=0, firstTry=0, missed=[], total=0, locked=false, phase="ask";
+function startDeck(customDeck){
+  deck=customDeck||shuffle(pool()); idx=0; firstTry=0; missed=[]; total=deck.length;
+  nextCard();
+}
+function nextCard(){
+  locked=false; tries=0; phase="ask";
+  if(tab==="map"){clearRing();S.forEach(function(x){setCls(x.c,"flash",false);});}
+  if(idx>=deck.length) return renderSummary();
+  cur=deck[idx];
+  if(tab==="capitals") return sub.capitals==="type"?renderType("cap"):renderFlash();
+  if(tab==="abbr") return renderType(sub.abbr==="toAbbr"?"ab":"st");
+  if(tab==="map") return renderFind();
+}
+function advance(){idx++;nextCard();}
+function requeue(c){var pos=Math.min(deck.length,idx+3+Math.floor(Math.random()*3));deck.splice(pos,0,c);if(missed.indexOf(c)<0)missed.push(c);}
+function countHTML(){return "<p class=\"count\">Card "+Math.min(idx+1,deck.length)+" of "+deck.length+". "+firstTry+" right on the first try.</p>";}
+function fb(msg,kind){var f=$("#fb");if(f){f.textContent=msg;f.className="feedback "+(kind||"");}}
+
+/* typing cards: kind cap | ab | st */
+function bankHTML(c){
+  var P=pool(), others=shuffle(P.filter(function(x){return x!==c;}));
+  if(others.length<7) others=others.concat(shuffle(S.map(function(x){return x.c;}).filter(function(x){return x!==c&&others.indexOf(x)<0;})));
+  var pick=shuffle([c].concat(others.slice(0,7))).map(function(x){return BY[x].cap;}).sort();
+  return "<p class=\"banklabel\">Word bank</p><div class=\"bank\">"+pick.map(function(w){return "<span>"+esc(w)+"</span>";}).join("")+"</div>";
+}
+function renderType(kind){
+  var x=BY[cur], head, ask, prompt, ph, cls="guess", ml=40, extra="";
+  if(kind==="cap"){
+    head="<h2>Capitals</h2><p class=\"help\">Type the capital. Spelling and capital letters count, just like on the quiz.</p>"+segHTML("capitals",[["type","Type it"],["flash","Flashcards"]]);
+    ask="What is the capital of"; prompt=esc(x.n)+"?"; ph="Type the capital";
+    extra=bankOn?bankHTML(cur):"";
+  }else if(kind==="ab"){
+    head="<h2>Postal abbreviations</h2><p class=\"help\">Two capital letters. No periods.</p>"+segHTML("abbr",[["toAbbr","State → abbreviation"],["toState","Abbreviation → state"]]);
+    ask="What is the abbreviation for"; prompt=esc(x.n)+"?"; ph="??"; cls+=" short"; ml=6;
+  }else{
+    head="<h2>Postal abbreviations</h2><p class=\"help\">Which state is this? Spell it correctly.</p>"+segHTML("abbr",[["toAbbr","State → abbreviation"],["toState","Abbreviation → state"]]);
+    ask="Which state is"; prompt="<span class=\"abbr\">"+x.c+"</span>"; ph="Type the state";
+  }
+  panel.innerHTML=head+
+    "<div class=\"qcard\"><p class=\"ask\">"+ask+"</p><p class=\"prompt"+(kind==="st"?" abbr":"")+"\">"+prompt+"</p>"+extra+
+    "<input class=\""+cls+"\" id=\"guess\" type=\"text\" maxlength=\""+ml+"\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"none\" spellcheck=\"false\" placeholder=\""+ph+"\" aria-label=\"Your answer\">"+
+    "<p class=\"feedback\" id=\"fb\"></p><div class=\"fix\" id=\"fix\"></div>"+
+    "<div class=\"row\" id=\"acts\"><button class=\"btn primary\" id=\"check\">Check</button><button class=\"btn\" id=\"show\">Show me</button></div></div>"+
+    (kind==="cap"?"<div class=\"toggles\"><button class=\"toggle\" id=\"tb\" aria-pressed=\""+bankOn+"\">Word bank</button></div>":"")+
+    (kind!=="cap"?tipsHTML(false):"")+countHTML();
+  var g=$("#guess");
+  g.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();checkType(kind);}});
+  $("#check").onclick=function(){checkType(kind);};
+  $("#show").onclick=function(){missType(kind,"","Here’s the answer.");};
+  var tb=$("#tb"); if(tb) tb.onclick=function(){bankOn=!bankOn;renderType(kind);};
+  if(window.matchMedia("(hover:hover)").matches) g.focus();
+}
+function answerFor(kind){var x=BY[cur];return kind==="cap"?x.cap:(kind==="ab"?x.c:x.n);}
+function checkType(kind){
+  if(locked) return;
+  var g=$("#guess"), v=g.value, right=answerFor(kind);
+  if(phase==="fix"){
+    var okFix=kind==="ab"?(v.trim()===right):(checkText(v,kind==="cap"?capAnswers(cur):[right])==="ok");
+    if(okFix){locked=true;fb("Great. Moving on.","good");setTimeout(function(){if(phase==="fix")advance();},650);}
+    else fb("Copy it exactly: "+right,"bad");
+    return;
+  }
+  var r=kind==="ab"?checkAbbr(cur,v):checkText(v,kind==="cap"?capAnswers(cur):[right]);
+  if(r==="empty"){fb("Type your answer first.","info");return;}
+  if(r==="ok"){
+    locked=true; var ok=tries===0; if(ok)firstTry++;
+    record(cur,kind==="cap"?"cap":"ab",ok); tally(ok);
+    fb(ok?"Yes! "+right+" is right.":"Got it.","good");
+    setTimeout(function(){advance();},900); return;
+  }
+  if(kind==="ab"){
+    var msg={period:"Right letters, but no periods. Write it "+right+".",space:"Right letters, but no space. Write it "+right+".",case:"Right letters, but both must be capitals: "+right+".",wrong:"Not quite."}[r];
+    missType(kind,v,msg); return;
+  }
+  if(r==="case"){fb("Spelled right! Now fix the capital letters.","info");return;}
+  tries++;
+  if(tries<2){fb("Not quite. Check your spelling and try once more.","bad");g.select();return;}
+  missType(kind,v,"Not quite.");
+}
+function missType(kind,v,msg){
+  if(phase==="fix") return;
+  var right=answerFor(kind);
+  record(cur,kind==="cap"?"cap":"ab",false); tally(false); requeue(cur);
+  phase="fix"; fb(msg,"bad");
+  var fx=$("#fix");
+  fx.innerHTML=(v.trim()?"<small>You wrote</small><div class=\"lineA\">"+esc(v.trim())+"</div>":"")+"<small>Correct answer</small><div class=\"lineB\">"+esc(right)+"</div>";
+  fx.classList.add("show");
+  var g=$("#guess"); g.value=""; g.placeholder="Type "+right+" to keep going"; g.focus();
+  $("#acts").innerHTML="<button class=\"btn primary\" id=\"check\">Check</button><button class=\"btn\" id=\"skip\">Skip</button>";
+  $("#check").onclick=function(){checkType(kind);};
+  $("#skip").onclick=advance;
+}
+
+/* capitals flashcards */
+function renderFlash(){
+  var x=BY[cur];
+  panel.innerHTML="<h2>Capitals</h2><p class=\"help\">Say the capital out loud, then flip the card to check.</p>"+segHTML("capitals",[["type","Type it"],["flash","Flashcards"]])+
+    "<button class=\"card\" id=\"card\" aria-label=\"Flashcard. Tap to flip.\"><span class=\"side\">What is the capital of</span><span class=\"face\">"+esc(x.n)+"</span><span class=\"side\">Tap to flip</span></button>"+
+    "<div class=\"row\" id=\"acts\"></div>"+countHTML();
+  $("#card").onclick=function(){
+    if(locked) return; locked=true;
+    var c=$("#card"); c.classList.add("flipped");
+    c.innerHTML="<span class=\"side\">The capital of "+esc(x.n)+" is</span><span class=\"face flip-in\">"+esc(x.cap)+"</span>";
+    $("#acts").innerHTML="<button class=\"btn good\" id=\"knew\">I knew it</button><button class=\"btn bad\" id=\"didnt\">Still learning</button>";
+    $("#knew").onclick=function(){record(cur,"cap",true);tally(true);firstTry++;advance();};
+    $("#didnt").onclick=function(){record(cur,"cap",false);tally(false);requeue(cur);advance();};
+    $("#knew").focus();
+  };
+}
+
+/* summary */
+function modeName(){
+  if(tab==="capitals") return sub.capitals==="type"?"Capitals (typing)":"Capitals (flashcards)";
+  if(tab==="abbr") return sub.abbr==="toAbbr"?"Abbreviations":"Abbreviation to state";
+  if(tab==="map") return "Map: find it";
+  return "Practice test";
+}
+function renderSummary(){
+  if(tab==="map") clearRing();
+  var right=total-missed.length;
+  send("Round finished",{mode:"States: "+modeName(),region:regionName(),score:right,total:total,missed:missed.map(function(c){return BY[c].n;}).join(", ")});
+  panel.innerHTML="<h2>Round complete!</h2>"+
+    "<div class=\"scorebox\"><div class=\"big\">"+right+" / "+total+"</div><div>right on the first try</div></div>"+
+    (missed.length?"<p class=\"help\">Practice these again: "+missed.map(function(c){return esc(BY[c].n);}).join(", ")+".</p>":"<p class=\"help\">Perfect round! Try another region, or take the practice test.</p>")+
+    "<div class=\"row\">"+(missed.length?"<button class=\"btn primary\" id=\"again\">Practice the "+missed.length+" I missed</button>":"")+"<button class=\"btn\" id=\"restart\">Start over</button></div>";
+  var a=$("#again"), m=missed.slice(); if(a) a.onclick=function(){start(shuffle(m));};
+  $("#restart").onclick=function(){start();};
+}
+
+/* ---------- practice test ---------- */
+var testN=10, testQ=[];
+function newTest(){
+  var P=shuffle(pool()); testQ=P.slice(0,testN==="all"?P.length:Math.min(testN,P.length));
+  renderTest();
+}
+function renderTest(){
+  var bank=testQ.map(function(c){return BY[c].cap;}).sort();
+  panel.innerHTML="<h2>Practice test</h2><p class=\"help\">Just like the real quiz: write each capital (use the word bank, spelling counts) and each postal abbreviation (two capital letters, no periods).</p>"+
+    "<div class=\"seg\" role=\"group\" id=\"tn\">"+[[10,"10 states"],[20,"20 states"],["all","All"]].map(function(o){return "<button data-n=\""+o[0]+"\" aria-pressed=\""+(String(testN)===String(o[0]))+"\">"+o[1]+"</button>";}).join("")+"</div>"+
+    "<div class=\"qcard\"><p class=\"banklabel\" style=\"margin-top:0\">Word bank</p><div class=\"bank\">"+bank.map(function(w){return "<span>"+esc(w)+"</span>";}).join("")+"</div></div>"+
+    "<div class=\"testhead\"><span></span><span>State</span><span>Capital</span><span class=\"h3\">Abbreviation</span></div>"+
+    testQ.map(function(c,i){return "<div class=\"testrow\" data-c=\""+c+"\"><span class=\"num\">"+(i+1)+".</span><span class=\"st\">"+esc(BY[c].n)+"</span>"+
+      "<div class=\"capc\"><input class=\"tcap\" type=\"text\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"none\" spellcheck=\"false\" aria-label=\"Capital of "+esc(BY[c].n)+"\"><div class=\"ans\"></div></div>"+
+      "<div><input class=\"tabr\" type=\"text\" maxlength=\"6\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"none\" spellcheck=\"false\" aria-label=\"Abbreviation for "+esc(BY[c].n)+"\"><div class=\"ans\"></div></div></div>";}).join("")+
+    "<div class=\"row\"><button class=\"btn primary\" id=\"grade\">Check my test</button><button class=\"btn\" id=\"newt\">New test</button><button class=\"btn\" id=\"prt\">Print a paper copy</button></div>"+
+    "<div id=\"tres\"></div>";
+  $("#tn").onclick=function(e){var b=e.target.closest("button");if(!b)return;var n=b.getAttribute("data-n");testN=n==="all"?"all":+n;newTest();};
+  $("#grade").onclick=gradeTest;
+  $("#newt").onclick=newTest;
+  $("#prt").onclick=printTest;
+}
+function gradeTest(){
+  var right=0, tot=0, miss=[];
+  panel.querySelectorAll(".testrow").forEach(function(row){
+    var c=row.getAttribute("data-c"), ic=row.querySelector(".tcap"), ia=row.querySelector("input.tabr");
+    var rc=checkText(ic.value,capAnswers(c)), ra=checkAbbr(c,ia.value);
+    tot+=2;
+    ic.classList.toggle("ok",rc==="ok"); ic.classList.toggle("no",rc!=="ok");
+    ia.classList.toggle("ok",ra==="ok"); ia.classList.toggle("no",ra!=="ok");
+    var ac=ic.nextElementSibling, aa=ia.nextElementSibling;
+    ac.textContent=rc==="ok"?"":(rc==="case"?"Capital letters: ":"")+BY[c].cap;
+    aa.textContent=ra==="ok"?"":(ra==="period"?"No periods: ":ra==="case"?"Capitals: ":"")+c;
+    if(rc==="ok")right++; else miss.push(BY[c].n+" capital");
+    if(ra==="ok")right++; else miss.push(c);
+    if(rc!=="empty")record(c,"cap",rc==="ok"); if(ra!=="empty")record(c,"ab",ra==="ok");
+  });
+  var pct=Math.round(right/tot*100);
+  $("#tres").innerHTML="<div class=\"scorebox"+(pct<80?" low":"")+"\"><div class=\"big\">"+right+" / "+tot+"</div><div>"+pct+"%. "+(pct===100?"Perfect score!":pct>=80?"Great work. Fix the red ones and try a new test.":"Keep practicing. Red boxes show the right answer.")+"</div></div>";
+  $("#tres").scrollIntoView({behavior:"smooth",block:"nearest"});
+  send("Practice test",{mode:"States: Practice test",region:regionName(),score:right,total:tot,missed:miss.join(", ")});
+}
+function printTest(){
+  var bank=testQ.map(function(c){return BY[c].cap;}).sort();
+  var rows=testQ.map(function(c,i){return "<tr><td>"+(i+1)+". "+esc(BY[c].n)+"</td><td></td><td></td></tr>";}).join("");
+  var key=testQ.map(function(c,i){return "<tr><td>"+(i+1)+". "+esc(BY[c].n)+"</td><td>"+esc(BY[c].cap)+"</td><td>"+c+"</td></tr>";}).join("");
+  document.getElementById("print").innerHTML="<h1>States &amp; Capitals Practice</h1><p class=\"nm\">Name: ______________________</p>"+
+    "<div class=\"wb\"><strong>Word bank:</strong><br>"+bank.map(function(w){return "<span>"+esc(w)+"</span>";}).join("")+"</div>"+
+    "<table><thead><tr><th style=\"width:38%\">State</th><th style=\"width:40%\">Capital</th><th>Abbreviation</th></tr></thead><tbody>"+rows+"</tbody></table>"+
+    "<div class=\"key\"><h1>Answer key</h1><table><thead><tr><th>State</th><th>Capital</th><th>Abbreviation</th></tr></thead><tbody>"+key+"</tbody></table></div>";
+  window.print();
+}
+
+/* ---------- map ---------- */
+var NS="http://www.w3.org/2000/svg", svg=document.getElementById("map");
+var els={}, centers={}, sizes={}, mapOK=false, mapBuilt=false, mapState="loading", unit=1, base=null, vb=null, gRing, gLabels, labelEls={};
+var MAPS=["us-aea-en","us-lcc-en","us-mill-en","us-merc-en"];
+function loadMap(i){
+  if(i>=MAPS.length){mapState="fail";if(tab==="map")ensureMap();return;}
+  var s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/"+MAPS[i]+".js";
+  s.onload=function(){if(Object.keys(window.__maps).length){mapState="ready";if(tab==="map")ensureMap();}else loadMap(i+1);};
+  s.onerror=function(){loadMap(i+1);};
+  document.head.appendChild(s);
+}
+function ensureMap(){
+  var msg=document.getElementById("mapmsg");
+  if(mapBuilt) return;
+  if(mapState==="loading"){msg.textContent="Loading the map…";msg.classList.add("show");return;}
+  if(mapState==="fail"){msg.textContent="The map didn’t load. Check the internet connection and reload. Everything else still works.";msg.classList.add("show");return;}
+  msg.classList.remove("show");
+  try{mapOK=buildMap();}catch(err){mapOK=false;}
+  mapBuilt=true;
+  if(!mapOK){msg.textContent="The map didn’t load. Everything else still works.";msg.classList.add("show");return;}
+  if(tab==="map") start();
+}
+function mk(tag,a){var e=document.createElementNS(NS,tag);for(var k in a)e.setAttribute(k,a[k]);return e;}
+function bboxOf(code){
+  var list=(els[code]||[]).filter(function(el){return el.tagName.toLowerCase()==="path";}); if(!list.length) return null;
+  var x1=Infinity,y1=Infinity,x2=-Infinity,y2=-Infinity;
+  list.forEach(function(el){var b=el.getBBox();x1=Math.min(x1,b.x);y1=Math.min(y1,b.y);x2=Math.max(x2,b.x+b.width);y2=Math.max(y2,b.y+b.height);});
+  return {x:x1,y:y1,width:x2-x1,height:y2-y1};
+}
+function buildMap(){
+  var m=window.__maps[Object.keys(window.__maps)[0]]; if(!m||!m.paths) return false;
+  var gO=mk("g",{}), gL=mk("g",{}), gB=mk("g",{}); gRing=mk("g",{}); gLabels=mk("g",{});
+  [gO,gL,gB,gRing,gLabels].forEach(function(g){svg.appendChild(g);});
+  Object.keys(m.paths).forEach(function(k){
+    var p=m.paths[k]; if(!p||!p.path) return;
+    var code=k.toUpperCase().replace(/^US[-_]/,"");
+    var el=mk("path",{d:p.path});
+    if(BY[code]){el.setAttribute("class","ctry rg-"+BY[code].r);el.setAttribute("data-c",code);(els[code]||(els[code]=[])).push(el);gL.appendChild(el);}
+    else{el.setAttribute("class","other");gO.appendChild(el);}
+  });
+  if(Object.keys(els).length<40) return false;
+  var A={x1:Infinity,y1:Infinity,x2:-Infinity,y2:-Infinity}, east=-Infinity;
+  S.forEach(function(x){var b=bboxOf(x.c);if(!b)return;
+    A.x1=Math.min(A.x1,b.x);A.y1=Math.min(A.y1,b.y);A.x2=Math.max(A.x2,b.x+b.width);A.y2=Math.max(A.y2,b.y+b.height);
+    centers[x.c]=[b.x+b.width/2,b.y+b.height/2]; sizes[x.c]=Math.sqrt(b.width*b.width+b.height*b.height);
+    if(x.c!=="AK"&&x.c!=="HI") east=Math.max(east,b.x+b.width);});
+  unit=(A.x2-A.x1)/100;
+  if(centers.MI){var mb=bboxOf("MI");centers.MI=[mb.x+mb.width*.68,mb.y+mb.height*.68];}
+  if(centers.FL){var fb2=bboxOf("FL");centers.FL=[fb2.x+fb2.width*.7,fb2.y+fb2.height*.55];}
+  if(centers.LA){var lb=bboxOf("LA");centers.LA=[lb.x+lb.width*.38,lb.y+lb.height*.45];}
+  // call-out boxes for small eastern states
+  var small=["NH","VT","MA","RI","CT","NJ","DE","MD"].filter(function(c){return centers[c];}).sort(function(a,b){return centers[a][1]-centers[b][1];});
+  var bw=unit*5, bh=unit*3.2, gap=unit*.7, x0=east+unit*3.5, lastY=-Infinity;
+  small.forEach(function(c){
+    var y=Math.max(centers[c][1]-bh/2,lastY+bh+gap); lastY=y;
+    gB.appendChild(mk("line",{x1:x0,y1:y+bh/2,x2:centers[c][0],y2:centers[c][1],"class":"leader"}));
+    var r=mk("rect",{x:x0,y:y,width:bw,height:bh,rx:unit*.7,"class":"ctry box rg-"+BY[c].r,"data-c":c});
+    els[c].push(r); gB.appendChild(r);
+    var t=mk("text",{x:x0+bw/2,y:y+bh/2,"font-size":unit*1.6,"class":"boxlbl"}); t.textContent=c; gB.appendChild(t);
+    A.x2=Math.max(A.x2,x0+bw); A.y2=Math.max(A.y2,y+bh);
+  });
+  S.forEach(function(x){
+    if(!centers[x.c]||small.indexOf(x.c)>=0) return;
+    var t=mk("text",{x:centers[x.c][0],y:centers[x.c][1],"font-size":unit*1.5,"stroke-width":unit*.35,"class":"lbl"});
+    labelEls[x.c]=t; gLabels.appendChild(t);
+  });
+  var pad=unit*2.5;
+  base={x:A.x1-pad,y:A.y1-pad,w:A.x2-A.x1+pad*2,h:A.y2-A.y1+pad*2}; vb=Object.assign({},base); setVB();
+  return true;
+}
+function setVB(){svg.setAttribute("viewBox",vb.x+" "+vb.y+" "+vb.w+" "+vb.h);}
+function zoomAt(f,px,py){
+  var nw=Math.min(Math.max(vb.w*f,base.w/8),base.w*1.25); f=nw/vb.w;
+  if(px===undefined){px=vb.x+vb.w/2;py=vb.y+vb.h/2;}
+  vb.x=px-(px-vb.x)*f; vb.y=py-(py-vb.y)*f; vb.w*=f; vb.h*=f; setVB();
+}
+function resetZoom(){if(base){vb=Object.assign({},base);setVB();}}
+function fitPool(){
+  var x1=Infinity,y1=Infinity,x2=-Infinity,y2=-Infinity;
+  pool().forEach(function(c){var b=bboxOf(c);if(!b)return;x1=Math.min(x1,b.x);y1=Math.min(y1,b.y);x2=Math.max(x2,b.x+b.width);y2=Math.max(y2,b.y+b.height);});
+  if(x1===Infinity) return;
+  var pad=unit*4,w=x2-x1+pad*2,h=y2-y1+pad*2,r=base.h/base.w; if(h/w>r)w=h/r; else h=w*r;
+  vb={x:(x1+x2)/2-w/2,y:(y1+y2)/2-h/2,w:w,h:h}; setVB();
+}
+function svgPoint(cx,cy){var pt=svg.createSVGPoint();pt.x=cx;pt.y=cy;var m=svg.getScreenCTM();return m?pt.matrixTransform(m.inverse()):{x:vb.x+vb.w/2,y:vb.y+vb.h/2};}
+var ptrs=new Map(), moved=0, last=null, pinch=null;
+svg.addEventListener("pointerdown",function(e){ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});if(ptrs.size===1){moved=0;last={x:e.clientX,y:e.clientY};}if(ptrs.size===2){var a=Array.from(ptrs.values());pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)};}});
+window.addEventListener("pointermove",function(e){
+  if(!ptrs.has(e.pointerId)||!vb) return; ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  var scale=Math.max(vb.w/svg.clientWidth,vb.h/svg.clientHeight);
+  if(ptrs.size===1&&last){var dx=e.clientX-last.x,dy=e.clientY-last.y;moved+=Math.abs(dx)+Math.abs(dy);if(moved>6){svg.classList.add("dragging");vb.x-=dx*scale;vb.y-=dy*scale;setVB();}last={x:e.clientX,y:e.clientY};}
+  else if(ptrs.size===2&&pinch){var a=Array.from(ptrs.values()),d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),mid=svgPoint((a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2);if(d>0){zoomAt(pinch.d/d,mid.x,mid.y);pinch.d=d;moved=99;}}
+});
+function endPtr(e){ptrs.delete(e.pointerId);if(ptrs.size<2)pinch=null;if(ptrs.size===1){var v=Array.from(ptrs.values())[0];last={x:v.x,y:v.y};}if(!ptrs.size)svg.classList.remove("dragging");}
+window.addEventListener("pointerup",endPtr);window.addEventListener("pointercancel",endPtr);
+svg.addEventListener("wheel",function(e){if(!vb)return;e.preventDefault();var pt=svgPoint(e.clientX,e.clientY);zoomAt(e.deltaY>0?1.15:1/1.15,pt.x,pt.y);},{passive:false});
+document.getElementById("zin").onclick=function(){if(vb)zoomAt(1/1.4);};
+document.getElementById("zout").onclick=function(){if(vb)zoomAt(1.4);};
+document.getElementById("zreset").onclick=resetZoom;
+svg.addEventListener("click",function(e){if(moved>6)return;var t=e.target.closest&&e.target.closest(".ctry");if(!t)return;onMapClick(t.getAttribute("data-c"));});
+
+var STATES=["sel","got","late","missed","flash"];
+function setCls(c,cls,on){(els[c]||[]).forEach(function(el){el.classList.toggle(cls,!!on);});}
+function clearMapStates(){S.forEach(function(x){STATES.forEach(function(s){setCls(x.c,s,false);});});clearRing();}
+function applyFilter(){var P=pool();S.forEach(function(x){setCls(x.c,"faded",P.indexOf(x.c)<0);});}
+function clearRing(){if(gRing)while(gRing.firstChild)gRing.removeChild(gRing.firstChild);}
+function ring(c){clearRing();if(!centers[c]||!gRing)return;var s=sizes[c];if(s>unit*9)return;gRing.appendChild(mk("circle",{cx:centers[c][0],cy:centers[c][1],r:Math.max(s/2+unit*1.2,unit*2.6),"class":"ring"}));}
+function paintMap(){
+  svg.classList.toggle("colored",tab==="map"&&sub.map==="explore");
+  svg.classList.toggle("live",true);
+  if(!gLabels) return;
+  var show=sub.map==="explore"&&labelMode!=="none";
+  gLabels.style.display=show?"":"none";
+  S.forEach(function(x){var t=labelEls[x.c];if(!t)return;t.textContent=labelMode==="name"?x.n:x.c;t.setAttribute("font-size",labelMode==="name"?unit*1.05:unit*1.5);});
+}
+var selected=null;
+function renderExplore(){
+  panel.innerHTML="<h2>Map</h2><p class=\"help\">Bonus practice. The map is not on this week’s quiz. Tap a state to see its capital and abbreviation.</p>"+
+    segHTML("map",[["explore","Explore"],["find","Find it"]])+
+    "<div class=\"toggles\">"+[["abbr","Show abbreviations"],["name","Show names"],["none","Hide labels"]].map(function(o){return "<button class=\"toggle\" data-l=\""+o[0]+"\" aria-pressed=\""+(labelMode===o[0])+"\">"+o[1]+"</button>";}).join("")+"</div>"+
+    "<div class=\"qcard\" id=\"info\">"+(selected?infoHTML(selected):"<p class=\"help\" style=\"margin:0\">Tap any state on the map. Small eastern states have boxes in the ocean that you can tap too.</p>")+"</div>";
+  panel.querySelectorAll("[data-l]").forEach(function(b){b.onclick=function(){labelMode=b.getAttribute("data-l");paintMap();renderExplore();};});
+  if(selected){setCls(selected,"sel",true);ring(selected);}
+}
+function infoHTML(c){var x=BY[c];return "<p class=\"ask\">"+REG[x.r]+"</p><p class=\"prompt\" style=\"font-size:2.2rem\">"+esc(x.n)+"</p><p style=\"margin:0\">Capital: <strong>"+esc(x.cap)+"</strong><br>Abbreviation: <strong>"+x.c+"</strong></p>";}
+function renderFind(){
+  panel.innerHTML="<h2>Map</h2><p class=\"help\">Bonus practice. Tap the state named below. You get three tries.</p>"+segHTML("map",[["explore","Explore"],["find","Find it"]])+
+    "<div class=\"qcard\"><p class=\"ask\">Find</p><p class=\"prompt\">"+esc(BY[cur].n)+"</p><p class=\"feedback\" id=\"fb\"></p>"+
+    "<div class=\"row\"><button class=\"btn\" id=\"show\">Show me</button><button class=\"btn primary\" id=\"nxt\" hidden>Next state</button></div></div>"+countHTML();
+  $("#show").onclick=function(){revealFind("Here it is.");};
+  $("#nxt").onclick=advance;
+}
+function revealFind(msg){if(locked)return;locked=true;setCls(cur,"missed",true);ring(cur);tally(false);requeue(cur);fb(msg,"bad");$("#show").hidden=true;$("#nxt").hidden=false;$("#nxt").focus();}
+function onMapClick(c){
+  if(tab!=="map") return;
+  if(sub.map==="explore"){if(selected)setCls(selected,"sel",false);selected=c;setCls(c,"sel",true);ring(c);var i=$("#info");if(i)i.innerHTML=infoHTML(c);return;}
+  if(locked||!cur||pool().indexOf(c)<0) return;
+  if(c===cur){locked=true;var ok=tries===0;if(ok)firstTry++;tally(ok);setCls(c,ok?"got":"late",true);fb(ok?"Yes, that’s "+BY[c].n+"!":"Got it on try "+(tries+1)+".","good");setTimeout(function(){if(tab==="map"&&sub.map==="find")advance();},900);}
+  else{tries++;(els[c]||[]).forEach(function(el){el.classList.remove("flash");el.getBoundingClientRect();el.classList.add("flash");});
+    if(tries>=3) revealFind("That’s "+BY[c].n+". Here’s "+BY[cur].n+".");
+    else fb("That’s "+BY[c].n+". Try again.","bad");}
+}
+
+/* ---------- optional tracking ---------- */
+var student=""; try{student=localStorage.getItem("us-student")||"";}catch(e){}
+var session=Math.random().toString(36).slice(2,8).toUpperCase(), t0=Date.now(), tallyA=0, tallyR=0, lastSent=-1;
+function regionName(){return region==="all"?"All 50":region==="custom"?"My list ("+custom.length+")":REG[region];}
+function tally(ok){tallyA++;if(ok)tallyR++;}
+function send(ev,extra){
+  if(!LOG_URL||!student) return;
+  var o={student:student,session:session,event:ev,mode:"",region:"",score:"",total:"",missed:"",
+    mastered:S.filter(function(x){return learned(x.c,"cap")&&learned(x.c,"ab");}).length,
+    minutes:Math.round((Date.now()-t0)/6000)/10,device:window.matchMedia("(pointer:coarse)").matches?"Phone/tablet":"Computer"};
+  for(var k in extra)o[k]=extra[k];
+  var body=JSON.stringify(o);
+  try{if(navigator.sendBeacon&&navigator.sendBeacon(LOG_URL,new Blob([body],{type:"text/plain;charset=UTF-8"})))return;}catch(e){}
+  try{fetch(LOG_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:body,keepalive:true});}catch(e){}
+}
+function sendSummary(){if(!tallyA||tallyA===lastSent)return;lastSent=tallyA;send("Session summary",{mode:"States & Capitals",score:tallyR,total:tallyA});}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")sendSummary();});
+window.addEventListener("pagehide",sendSummary);
+function showWho(){var w=$("#who");if(!LOG_URL||!student){w.hidden=true;return;}w.hidden=false;w.innerHTML="Studying as "+esc(student)+". <button class=\"linkbtn\" id=\"chg\">Change name</button>";$("#chg").onclick=askName;}
+function askName(){
+  var m=$("#nameModal"),inp=$("#nmInput"); inp.value=student; m.hidden=false; inp.focus();
+  function go(){var v=inp.value.trim();if(!v){$("#nmErr").textContent="Type your name to start.";return;}
+    var first=!student;student=v;try{localStorage.setItem("us-student",v);}catch(e){}m.hidden=true;showWho();if(first)send("Started",{region:regionName(),mode:"States & Capitals"});}
+  $("#nmGo").onclick=go; inp.onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();go();}};
+}
+
+document.getElementById("resetProgress").onclick=function(){if(!confirm("Clear all saved progress on this device?"))return;prog={};save();updateMeters();start();};
+
+/* ---------- init ---------- */
+renderRegions(); updateMeters(); start(); loadMap(0);
+if(LOG_URL){if(student){showWho();send("Started",{region:regionName(),mode:"States & Capitals"});}else askName();}
+})();
+</script>
+</body>
+</html>
